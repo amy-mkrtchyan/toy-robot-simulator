@@ -4,12 +4,16 @@ require_relative '../paths.inc.rb'
 require_relative '../game.rb'
 
 def file_mode(filepath)
-  instructions = YAML.load_file filepath
+  puts 'Welcome to the Game!'
 
-  # run command
-  instructions['command'].each do |cmd|
-    puts "> #{cmd}"
-    handle_cmd(cmd, 'f')
+  command_sets = YAML.load_file filepath
+  command_sets.each do |name, set|
+    puts "\n\n\nExecuting Command Set #{name}:"
+    set.each do |cmd|
+      puts "> #{cmd}"
+      handle_cmd(cmd, :f)
+    end
+
   end
 end
 
@@ -20,7 +24,7 @@ def interactive_mode
   puts "Let's start!"
 
   while true
-    handle_cmd( get_cmd('>>> '), :i )
+    handle_cmd( get_cmd('> '), :i )
   end
 end
 
