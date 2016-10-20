@@ -7,7 +7,7 @@ class PlayBoard
   end
 
   def covers?(x,y)
-    x <= size_x && y <= size_y
+    x.between?(0, @size_x) && y.between?(0, @size_y)
   end
 
 end

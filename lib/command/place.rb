@@ -8,7 +8,8 @@ module Command
     end
 
     def execute!
-      @robot.set_position!(@x,@y,@f) if @board.covers?(@x,@y)
+      raise 'Place Robot inside table!' unless @board.covers?(@x,@y)
+      @robot.set_position!(@x,@y,@f)
     end
 
   end

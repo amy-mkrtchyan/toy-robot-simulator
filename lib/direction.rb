@@ -9,6 +9,7 @@ class Direction
       'SOUTH' => 270
   }
 
+
   def initialize(f)
     @f = COMPASS[f]
   end
@@ -33,8 +34,6 @@ class Direction
   def change!(degree)
     @f += degree
   end
-
-  private
 
   def deg2rad
     @f * Math::PI / 180

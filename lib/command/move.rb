@@ -6,7 +6,9 @@ module Command
     end
 
     def execute!
-      @robot.move! if @robot.placed? && @board.covers?(@robot.next_step)
+      raise 'Place Robot first.' unless @robot.placed?
+      raise 'End of the road, time to turn around!' unless @board.covers?(*@robot.next_step)
+      @robot.move!
     end
 
   end
