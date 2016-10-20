@@ -1,0 +1,122 @@
+#!/usr/bin/env ruby
+
+
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+
+require_relative '../dep.rb'
+require 'game.rb'
+
+def file_mode(filepath)
+  instructions = YAML.load_file filepath
+
+  # run command
+  instructions['command'].each do |cmd|
+    puts "> #{cmd}"
+    handle_cmd(cmd, 'f')
+  end
+end
+
+def interactive_mode
+  puts 'Welcome to Toy Robot Simulator!'
+
+  print_commands
+  puts "Let's start!"
+
+  while true
+    handle_cmd(get_cmd('> '), 'i')
+  end
+end
+
+def print_help_and_exit
+  puts <<-HELP
+Usage: play [arguments]
+  -i        Interactive mode
+  -f file   Load actions from file
+HELP
+  exit(0)
+end
+
+def print_commands
+  puts <<-WELCOME
+Following are available command:
+  PLACE x, y, direction   place robot on playground
+                          'x' and 'y' are integer
+                          direction can be one of ['north', 'east', 'south', 'west']
+  MOVE                    move a step forward
+  LEFT                    turn left
+  RIGHT                   turn right
+  REPORT                  report on current position
+  QUIT                    quit the game
+  HELP                    print available command
+
+REMARK: command are case insensitive
+
+WELCOME
+end
+
+def get_cmd(prefix)
+  print prefix
+  gets.strip
+end
+
+def print_error_message(e)
+  puts "Oops, #{e.message}. Please try again."
+end
+
+def print_position
+  begin
+    position = $game.report
+  rescue StandardError => e
+    return print_error_message e
+  end
+  pos_y = $game.playboard_y - position[:y] - 1
+
+  rows = Array.new($game.playboard_y) { Array.new($game.playboard_x, '   ')}
+  rows[pos_y][position[:x]] = robot_direction(position[:f])
+
+  puts table(nil, *rows)
+end
+
+def robot_direction(direction)
+  case direction
+    when 'NORTH' then ' ▲ '
+    when 'EAST'  then ' ▶ '
+    when 'SOUTH' then ' ▼ '
+    when 'WEST'  then ' ◀ '
+  end
+end
+
+def extract_and_validate(cmd, &block)
+  action, x, y, f = cmd.split(/\W+/).reject {|w| w.empty?}
+
+  InputValidator.validate_numericality_of x, y if x || y
+  InputValidator.validate_format_of f if f
+
+  yield action.downcase, x.to_i, y.to_i, f
+
+rescue StandardError => e
+    print_error_message e
+end
+
+def handle_cmd(cmd, mode)
+  extract_and_validate(cmd) do |action, x, y, f|
+    case action
+      when 'report' then print_position
+      when 'place' then $game.send(action, x, y, f)
+      when 'left', 'right', 'move' then $game.send(action)
+    else
+      mode == 'i' ? print_commands : (puts "Bad Command! I don't get you...")
+    end
+  end
+end
+
+################   START   ################
+
+$game = Game.new
+case ARGV.shift # mode
+  when '-i' then interactive_mode
+  when '-f' then file_mode(ARGV.shift)
+  else print_help_and_exit
+end
