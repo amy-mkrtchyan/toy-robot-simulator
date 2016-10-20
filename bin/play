@@ -10,7 +10,7 @@ def file_mode(filepath)
   command_sets.each do |name, set|
     puts "\n\n\nExecuting Command Set #{name}:"
     set.each do |cmd|
-      puts "> #{cmd}"
+      puts "# > #{cmd}"
       handle_cmd(cmd, :f)
     end
 
@@ -24,7 +24,7 @@ def interactive_mode
   puts "Let's start!"
 
   while true
-    handle_cmd( get_cmd('> '), :i )
+    handle_cmd( get_cmd('# > '), :i )
   end
 end
 
@@ -79,13 +79,17 @@ end
 
 
 def table_print(position)
-  puts position.to_yaml
-  pos_y = $game.playboard_y - position[:y] - 1
-
   rows = Array.new($game.playboard_y) { Array.new($game.playboard_x, '   ')}
+
+  pos_y = $game.playboard_y - position[:y] - 1
   rows[pos_y][position[:x]] = get_arrow_for(position[:f])
 
-  puts table(nil, *rows)
+  table = Terminal::Table.new do |t|
+    t.rows = rows
+    t.style = {all_separators: true}
+  end
+
+  puts position.to_yaml, table
 end
 
 
@@ -107,12 +111,14 @@ def handle_cmd(cmd, mode)
     case action
       when 'report' then table_print($game.report)
       when 'place'  then $game.send(action, x, y, f)
-      when 'left', 'right', 'move' then $game.send(action)
+      when 'left','right','move','quit' then $game.send(action)
     else
       mode == :i ? print_commands : (puts 'Bad Command!')
     end
   end
 end
+
+at_exit { puts "\n\n\nBye Human! See you later! \n\n\n" }
 
 ################   START   ################
 
