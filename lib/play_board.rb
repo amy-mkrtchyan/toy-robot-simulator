@@ -7,7 +7,21 @@ class PlayBoard
   end
 
   def covers?(x,y)
-    x.between?(0, @size_x) && y.between?(0, @size_y)
+    x.to_i.between?(0, @size_x) && y.to_i.between?(0, @size_y)
+  end
+
+  def draw(x:,y:,f:)
+    rows = Array.new(@size_y) { Array.new(@size_x, '   ')}
+
+    pos_y = @size_y - y - 1
+    rows[pos_y][x] = f.to_arrow
+
+    table = Terminal::Table.new do |t|
+      t.rows = rows
+      t.style = {all_separators: true}
+    end
+
+    puts "x: #{x}", "y: #{y}", "f: #{f.to_compass}",  table
   end
 
 end

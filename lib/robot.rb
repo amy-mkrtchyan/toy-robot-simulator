@@ -3,7 +3,7 @@ class Robot
   attr_accessor :x, :y, :f
 
   def set_position!(x,y,f)
-    @x, @y, @f = x,y, Direction.new(f)
+    @x, @y, @f = x.to_i, y.to_i, Direction.new(f)
   end
 
   def placed?
@@ -23,11 +23,11 @@ class Robot
   end
 
   def report
-    {x: @x, y: @y, f: @f.to_compass}
+    {x: @x, y: @y, f: @f}
   end
 
   def next_step
-    return @x + @f.calcCos, @y + @f.calcSin
+    return @x + @f.calc_cos, @y + @f.calc_sin
   end
 
 end

@@ -1,19 +1,19 @@
 class InputValidator
   class << self
-    def validate_numericality_of(*coordinates)
-      raise ArgumentError, 'Nice try! x and y must be numbers!' if coordinates.any? {|c| c.is_numeric? == false }
+
+    def validate_numericality_of(x, y, allow_nil:)
+      return if allow_nil && x.nil? && y.nil?
+      raise ArgumentError, 'Nice try! x and y must be numbers!' if [x,y].any? {|c| !is_int? c }
     end
 
-    def validate_format_of(direction)
-      raise ArgumentError, ' Hehe... Now give me valid direction.' unless Direction::COMPASS.keys.include? direction
+    def validate_inclusion_of(direction, in_the:, allow_nil:)
+      return if allow_nil && direction.nil?
+      raise ArgumentError, ' Hehe... Now give me valid direction.' unless in_the.include? direction
+    end
+
+    def is_int?(object)
+      object == object.to_i.to_s
     end
 
   end
-
-  String.class_eval do
-    def is_numeric?
-      Integer(self) rescue false
-    end
-  end
-
 end

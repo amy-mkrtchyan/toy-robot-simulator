@@ -1,12 +1,13 @@
 module Command
   class Report < CommandBase
 
-    def initialize(robot)
-      @robot = robot
+    def initialize(robot, board)
+      @robot, @board = robot, board
     end
 
     def execute!
-      @robot.report if @robot.placed?
+      raise StandardError, 'Place Robot first.' unless @robot.placed?
+      @board.draw(**@robot.report)
     end
 
   end

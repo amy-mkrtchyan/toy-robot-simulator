@@ -6,7 +6,8 @@ module Command
     end
 
     def execute!
-      @robot.rotate_left! if @robot.placed?
+      raise StandardError, 'Place Robot first.' unless @robot.placed?
+      @robot.rotate_left!
     end
 
   end

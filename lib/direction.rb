@@ -3,31 +3,47 @@ class Direction
   attr_accessor :f
 
   COMPASS = {
-      'EAST' => 0,
-      'NORTH' => 90,
-      'WEST' => 180,
-      'SOUTH' => 270
+      'east' => {
+          angle: 0,
+          arrow: ' ▶ '
+      },
+      'north' => {
+          angle: 90,
+          arrow: ' ▲ '
+      },
+      'west' => {
+          angle: 180,
+          arrow: ' ◀ '
+      },
+      'south' => {
+          angle: 270,
+          arrow: ' ▼ '
+      }
   }
 
 
   def initialize(f)
-    @f = COMPASS[f]
+    @f = COMPASS[f][:angle]
   end
 
   def to_compass
-    sin = calcSin
-    return 'NORTH' if sin == 1
-    return 'SOUTH' if sin == -1
-    cos = calcCos
-    return 'EAST' if cos == 1
-    return 'WEST' if cos == -1
+    sin = calc_sin
+    return 'north' if sin == 1
+    return 'south' if sin == -1
+    cos = calc_cos
+    return 'east' if cos == 1
+    return 'west' if cos == -1
   end
 
-  def calcSin
+  def to_arrow
+    COMPASS[to_compass][:arrow]
+  end
+
+  def calc_sin
     Math.sin(deg2rad).to_i
   end
 
-  def calcCos
+  def calc_cos
     Math.cos(deg2rad).to_i
   end
 
