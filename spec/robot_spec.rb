@@ -14,12 +14,18 @@ describe Robot do
       subject.set_position!(0,1,'west').rotate_left!
       is_expected.to be_positioned_at(0,1,'south')
     end
+    it 'does nothing until Robo placed' do
+      expect { rotate_left! }.to raise_error StandardError
+    end
   end
 
   describe '#rotate_right!' do
     it 'rotates Robo to right' do
       subject.set_position!(0,1,'west').rotate_right!
       is_expected.to be_positioned_at(0,1,'north')
+    end
+    it 'does nothing until Robo placed' do
+      expect { rotate_right! }.to raise_error StandardError
     end
   end
 
