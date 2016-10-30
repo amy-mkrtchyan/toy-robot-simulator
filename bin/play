@@ -10,8 +10,7 @@ end
 
 
 def interactive_mode
-  print_commands
-  puts "Welcome! Let's start!"
+  welcome!
   while true
     begin
       @game.handle_command(get_cmd('# > '))
@@ -43,19 +42,21 @@ Usage: play [arguments]
 end
 
 
-def print_commands
+def welcome!
   puts <<-WELCOME
+Welcome! Let's start!
+
 Following are available command:
   PLACE x, y, direction   place robot on playground
                           'x' and 'y' are integer
-                          direction can be one of ['north', 'east', 'south', 'west']
+                          direction can be one of ['NORTH', 'EAST', 'SOUTH', 'WEST']
   MOVE                    move a step forward
   LEFT                    turn left
   RIGHT                   turn right
   REPORT                  report on current position
   QUIT                    quit the game
 
-REMARK: command are case insensitive
+REMARK: commands are case insensitive
 
   WELCOME
 end

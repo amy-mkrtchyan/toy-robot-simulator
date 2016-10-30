@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Robot do
 
-  describe '#new' do
-    it { is_expected.to be_a Robot }
-  end
-
   describe '#set_position!' do
     it 'places Robo at given position' do
       subject.set_position!(0,1,'west')

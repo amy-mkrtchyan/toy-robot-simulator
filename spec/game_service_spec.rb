@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe GameService do
 
-  describe '#new' do
-    it {is_expected.to be_a GameService}
-  end
-
   describe '#handle_command' do
     it do
       subject.handle_command('PLACE 0, 1, WEST')
