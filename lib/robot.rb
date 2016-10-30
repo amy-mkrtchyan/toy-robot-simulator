@@ -4,6 +4,7 @@ class Robot
 
   def set_position!(x,y,f)
     @x, @y, @f = x.to_i, y.to_i, Direction.new(f)
+    self
   end
 
   def placed?
@@ -12,18 +13,21 @@ class Robot
 
   def rotate_left!
     @f.change!(90)
+    self
   end
 
   def rotate_right!
     @f.change!(-90)
+    self
   end
 
   def move!
     @x, @y = next_step
+    self
   end
 
   def report
-    {x: @x, y: @y, f: @f}
+    {x: @x, y: @y, f: @f.to_compass, arrow: @f.to_arrow}
   end
 
   def next_step

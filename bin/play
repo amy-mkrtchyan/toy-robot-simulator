@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require_relative '../paths.inc.rb'
-require_relative '../game_service.rb'
 
 def file_mode(filepath)
   @game.handle_composite(filepath)
@@ -55,7 +54,6 @@ Following are available command:
   RIGHT                   turn right
   REPORT                  report on current position
   QUIT                    quit the game
-  HELP                    print available command
 
 REMARK: command are case insensitive
 

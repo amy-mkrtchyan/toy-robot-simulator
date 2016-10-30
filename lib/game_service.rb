@@ -1,5 +1,7 @@
 class GameService
 
+  attr_reader :robot
+
   def initialize
     @robot = Robot.new
     @board = PlayBoard.new
